@@ -29,3 +29,12 @@ def test_push_multiple_items():
     assert stack.pop() == 2
     assert stack.peek() == 1
     assert stack.pop() == 1
+
+
+def test_stack_length():
+    stack = Stack()
+    assert len(stack) == 0
+    stack.push(1)
+    assert len(stack) == 1
+    stack.pop()
+    assert len(stack) == 0

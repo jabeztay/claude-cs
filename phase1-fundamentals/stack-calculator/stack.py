@@ -1,8 +1,12 @@
 from typing import Any
 
+
 class Stack:
     def __init__(self):
         self._stack = []
+
+    def __len__(self):
+        return len(self._stack)
 
     def push(self, value: Any):
         self._stack.append(value)
