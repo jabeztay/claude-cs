@@ -14,7 +14,6 @@ def test_calculations():
         MUL,
         LOAD_CONST, 2,
         SUB,
-        PRINT,
         HALT
     ]
     vm.run(bytecode)
@@ -26,9 +25,60 @@ def test_calculations():
         LOAD_CONST, 42,
         STORE, "x",
         LOAD_VAR, "x",
-        PRINT,
         HALT
     ]
     vm.run(bytecode)
 
     assert vm.stack.peek() == 42
+
+    bytecode = [
+        LOAD_CONST, 5,
+        LOAD_CONST, 3,
+        GT,
+        HALT
+    ]
+    vm.run(bytecode)
+
+    assert vm.stack.peek() == 1
+
+    bytecode = [
+        LOAD_CONST, 5,
+        LOAD_CONST, 3,
+        GT,
+        JUMP_IF_NOT_ZERO, 10,
+        LOAD_CONST, "small", HALT,
+        LOAD_CONST, "big", HALT,
+    ]
+    vm.run(bytecode)
+
+    """
+    counter = 1
+    while counter <= 3:
+        print(counter)
+        counter = counter + 1
+   """
+
+    assert vm.stack.peek() == "big"
+
+    bytecode = [
+        LOAD_CONST, 1,
+        STORE, "counter",
+        LOAD_VAR, "counter",
+        LOAD_CONST, 3,
+        LEQ,
+        JUMP_IF_ZERO, 22,
+        LOAD_VAR, "counter",
+        PRINT,
+        LOAD_VAR, "counter",
+        LOAD_CONST, 1,
+        ADD,
+        STORE, "counter",
+        JUMP, 4,
+        HALT,
+    ]
+    vm.run(bytecode)
+    bytecode = [
+        LOAD_VAR, "counter"
+    ]
+    vm.run(bytecode)
+    assert vm.stack.peek() == 4
