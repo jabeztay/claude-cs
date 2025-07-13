@@ -50,3 +50,27 @@ def test_errors():
     with pytest.raises(ValueError, match="requires 2.*but stack only has 1"):
         calc = Calculator()
         calc.execute("10 +")
+
+
+def test_math():
+    calc = Calculator()
+    calc.execute("0 sin")
+    assert calc.result() == 0
+
+    calc.execute("cos")
+    assert calc.result() == 1
+
+    calc.execute("log")
+    assert calc.result() == 0
+
+
+def test_clear_variables():
+    calc = Calculator()
+    calc.execute("10 x =")
+    calc.clear_stack()
+    calc.execute("x x *")
+    assert calc.result() == 100
+    calc.clear_variables()
+
+    with pytest.raises(ValueError, match="Undefined variable 'x'"):
+        calc.execute("x *")

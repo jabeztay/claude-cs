@@ -1,6 +1,7 @@
 from stack import Stack
 from tokenizer import tokenize
 from numbers import Number
+import math
 
 
 class Calculator:
@@ -13,6 +14,10 @@ class Calculator:
         'neg': (lambda x: -x, 1),
         'sqrt': (lambda x: x ** 0.5, 1),
         'pow': (lambda x, y: x ** y, 2),
+        'sin': (math.sin, 1),
+        'cos': (math.cos, 1),
+        'tan': (math.tan, 1),
+        'log': (math.log, 1),
     }
 
     def __init__(self):
@@ -31,7 +36,7 @@ class Calculator:
                 func, needed_operands = self.OPERATORS[token]
 
                 if len(self.stack) < needed_operands:
-                    raise ValueError(f"Error: Operator '{token}' requires {needed_operands}, but stack only has {len(self.stack)}")
+                    raise ValueError(f"Operator '{token}' requires {needed_operands}, but stack only has {len(self.stack)}")
 
                 operands = [self.stack.pop() for _ in range(needed_operands)]
 
@@ -56,20 +61,20 @@ class Calculator:
         except ValueError:
             if token.isalpha() and len(token) == 1:
                 return True
-        raise ValueError(f"Error: Invalid variable name '{token}'")
+        raise ValueError(f"Invalid variable name '{token}'")
 
     def _fetch_stored_value(self, token: str) -> Number:
         try:
             return self.variables[token]
         except KeyError:
-            raise ValueError(f"Error: Undefined variable '{token}'")
+            raise ValueError(f"Undefined variable '{token}'")
 
     def result(self) -> Number:
         if len(self.stack) == 1:
             return self.stack.peek()
         elif len(self.stack) == 0:
             return 0
-        raise ValueError(f"Error: Stack currently has {len(self.stack)} items remaining.")
+        raise ValueError(f"Stack currently has {len(self.stack)} items remaining.")
 
     def clear_variables(self) -> None:
         self.variables = {}
