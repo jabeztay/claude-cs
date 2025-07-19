@@ -44,33 +44,86 @@ class Parser:
     def parse_expression(self):
         return self.parse_addition()
 
+    def parse_let_statement(self):
+        self.current += 1
+        var_name = self.tokens[self.current]
+
+        self.current += 1
+        if not self.tokens[self.current][0] == "=":
+            raise SyntaxError(f"'let' expects '=' after variable name, but received {self.tokens[self.current][0]}")
+
+        self.current += 1
+        right = self.parse_expression()
+
+        if not self.tokens[self.current][0] == ";":
+            raise SyntaxError(f"'let' expects ';' after expression, but received {self.tokens[self.current][0]}")
+
+        return Node("let", Node(var_name[0]), right)
+
+    def parse_print_statement(self):
+        self.current += 1
+        if not self.tokens[self.current][0] == "(":
+            raise SyntaxError(f"'print' expects '(' after print keyword, but received {self.tokens[self.current][0]}")
+
+        self.current += 1
+        left = self.parse_expression()
+
+        if not self.tokens[self.current][0] == ")":
+            raise SyntaxError(f"'print' expects ')' after evaluating expression, but received {self.tokens[self.current][0]}")
+
+        self.current += 1
+        if not self.tokens[self.current][0] == ";":
+            raise SyntaxError(f"'print' expects ';' after expression and closing parentheses, but received {self.tokens[self.current][0]}")
+
+        return Node("print", left=left)
+
+    def parse_input(self):
+        first_token_value = self.tokens[self.current][0]
+        if first_token_value == 'let':
+            return self.parse_let_statement()
+        elif first_token_value == 'print':
+            return self.parse_print_statement()
+        else:
+            return self.parse_expression()
 
 if __name__ == "__main__":
     parser = Parser(tokenize("2 + 5"))
     print(parser.tokens)
-    root = parser.parse_addition()
+    root = parser.parse_input()
     print(root.post_order())
     parser = Parser(tokenize("5"))
     print(parser.tokens)
-    root = parser.parse_addition()
+    root = parser.parse_input()
     print(root.post_order())
     parser = Parser(tokenize("5 + 2 * 2"))
     print(parser.tokens)
-    root = parser.parse_addition()
+    root = parser.parse_input()
     print(root.post_order())
     parser = Parser(tokenize("5 + 2 / 2"))
     print(parser.tokens)
-    root = parser.parse_addition()
+    root = parser.parse_input()
     print(root.post_order())
     parser = Parser(tokenize("5 * 2 + 2"))
     print(parser.tokens)
-    root = parser.parse_addition()
+    root = parser.parse_input()
     print(root.post_order())
     parser = Parser(tokenize("1 + 2 + 3 + 4"))
     print(parser.tokens)
-    root = parser.parse_addition()
+    root = parser.parse_input()
     print(root.post_order())
     parser = Parser(tokenize("10 + 5 * 2"))
     print(parser.tokens)
-    root = parser.parse_addition()
+    root = parser.parse_input()
+    print(root.post_order())
+
+    parser = Parser(tokenize("let x = 42;"))
+    root = parser.parse_input()
+    print(root.post_order())
+
+    parser = Parser(tokenize("let y = x * 42;"))
+    root = parser.parse_input()
+    print(root.post_order())
+
+    parser = Parser(tokenize("print(x);"))
+    root = parser.parse_input()
     print(root.post_order())

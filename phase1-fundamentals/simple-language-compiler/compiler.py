@@ -4,17 +4,43 @@ from typing import Any
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../virtual-machine'))
-from vm import ADD, SUB, MUL, DIV, HALT, VirtualMachine, LOAD_CONST
+from vm import *
 
 
 class Compiler:
     @staticmethod
     def compile_tree(tree):
-        post_order = tree.post_order()
-        return Compiler.generate_bytecode(post_order)
+        if tree.val == "let":
+            bytecode = Compiler.compile_let_statement(tree)
+        elif tree.val == "print":
+            bytecode = Compiler.compile_print_statement(tree)
+        else:
+            post_order = tree.post_order()
+            bytecode = Compiler.generate_expression_bytecode(post_order)
+
+        bytecode.append(HALT)
+        return bytecode
 
     @staticmethod
-    def generate_bytecode(post_order_tokens: list[Any]):
+    def compile_let_statement(tree):
+        var_name = tree.left.val
+
+        right_post_order = tree.right.post_order()
+        right_bytecode = Compiler.generate_expression_bytecode(right_post_order)
+
+        instructions = right_bytecode + [STORE, var_name]
+        return instructions
+
+    @staticmethod
+    def compile_print_statement(tree):
+        left_post_order = tree.left.post_order()
+        left_bytecode = Compiler.generate_expression_bytecode(left_post_order)
+
+        instructions = left_bytecode + [PRINT]
+        return instructions
+
+    @staticmethod
+    def generate_expression_bytecode(post_order_tokens: list[Any]):
         OPERATOR_MAP = {
             '+': ADD,
             '-': SUB,
@@ -29,15 +55,17 @@ class Compiler:
                 instructions.append(token)
             elif token in OPERATOR_MAP:
                 instructions.append(OPERATOR_MAP[token])
+            elif isinstance(token, str):
+                instructions.append(LOAD_VAR)
+                instructions.append(token)
 
-        instructions.append(HALT)
         return instructions
 
 
 
 if __name__ == "__main__":
     parser = Parser(tokenize("5 * 2 + 2"))
-    root = parser.parse_expression()
+    root = parser.parse_input()
     print(root)
     vm = VirtualMachine()
     bytecode = Compiler.compile_tree(root)
@@ -46,7 +74,7 @@ if __name__ == "__main__":
     print(vm.stack.peek())
 
     parser = Parser(tokenize("1 + 2 + 3 + 4"))
-    root = parser.parse_expression()
+    root = parser.parse_input()
     print(root)
     vm = VirtualMachine()
     bytecode = Compiler.compile_tree(root)
@@ -55,10 +83,52 @@ if __name__ == "__main__":
     print(vm.stack.peek())
 
     parser = Parser(tokenize("10 + 5 * 2"))
-    root = parser.parse_expression()
+    root = parser.parse_input()
     print(root)
     vm = VirtualMachine()
     bytecode = Compiler.compile_tree(root)
     print(bytecode)
     vm.run(bytecode)
     print(vm.stack.peek())
+
+    parser = Parser(tokenize("let x = 42;"))
+    root = parser.parse_input()
+    print(root)
+    vm = VirtualMachine()
+    bytecode = Compiler.compile_tree(root)
+    print(bytecode)
+    vm.run(bytecode)
+    print(vm.variables)
+
+    parser = Parser(tokenize("let x = 10 + 5;"))
+    root = parser.parse_input()
+    print(root)
+    vm = VirtualMachine()
+    bytecode = Compiler.compile_tree(root)
+    print(bytecode)
+    vm.run(bytecode)
+    print(vm.variables)
+
+    parser = Parser(tokenize("x * 2"))
+    root = parser.parse_input()
+    print(root)
+    bytecode = Compiler.compile_tree(root)
+    print(bytecode)
+    vm.run(bytecode)
+    print(vm.stack.peek())
+
+    parser = Parser(tokenize("let x = 42;"))
+    root = parser.parse_input()
+    print(root)
+    vm = VirtualMachine()
+    bytecode = Compiler.compile_tree(root)
+    print(bytecode)
+    vm.run(bytecode)
+    print(vm.variables)
+
+    parser = Parser(tokenize("print(x);"))
+    root = parser.parse_input()
+    print(root)
+    bytecode = Compiler.compile_tree(root)
+    print(bytecode)
+    vm.run(bytecode)
