@@ -17,6 +17,7 @@ LT = 13                # Pop b, pop a, push 1 if a < b else 0
 EQ = 14                # Pop b, pop a, push 1 if a == b else 0
 GEQ = 15               # Pop b, pop a, push 1 if a >= b else 0
 LEQ = 16               # Pop b, pop a, push 1 if a <= b else 0
+DIV = 17               # Pop two values, divide, push result
 
 
 class Stack:
@@ -65,6 +66,7 @@ class VirtualMachine:
             EQ: self.execute_eq,
             GEQ: self.execute_geq,
             LEQ: self.execute_leq,
+            DIV: self.execute_div,
         }
 
     def run(self, bytecode: list[int]) -> None:
@@ -160,3 +162,7 @@ class VirtualMachine:
         if a == 0:
             new_address = self.bytecode[self.pc]
             self.pc = new_address - 1
+
+    def execute_div(self):
+        b, a = self.stack.pop(), self.stack.pop()
+        self.stack.push(a / b)
