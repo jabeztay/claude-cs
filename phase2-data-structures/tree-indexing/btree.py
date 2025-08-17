@@ -617,4 +617,11 @@ def validate_tree_structure(node, level=0):
 
 # Run the tests
 if __name__ == "__main__":
-    test_bplus_tree_deletion()
+    # test_bplus_tree_deletion()
+    import pickle
+    btree = BPlusTree(keys=["apple", "banana"], values=["fruit1", "fruit2"])
+    print(len(pickle.dumps(btree)))
+    btree.insert("dragonfruit", "fruit3")
+    print(len(pickle.dumps(btree)))
+    btree.insert("papaya", "fruit4")
+    print(len(pickle.dumps(btree)))
