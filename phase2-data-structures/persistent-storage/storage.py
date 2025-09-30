@@ -1,7 +1,6 @@
 from pathlib import Path
 import struct
 
-
 class Database:
     def __init__(self, filename: str):
         self.filename = filename
@@ -10,9 +9,12 @@ class Database:
     def __enter__(self):
         file_path = Path(self.filename)
         if not file_path.exists():
-            with open(file_path, 'wb') as f:
-                f.write(self.init_metadata())
-        self.file_handle = open(file_path, 'rb+')
+            with open(file_path, 'x'):
+                pass
+            self.file_handle = open(file_path, 'rb+')
+            self.init_metadata()
+        else:
+            self.file_handle = open(file_path, 'rb+')
 
         metadata = self.read_page(0)
         magic_bytes, version, root_page, bitmap = self.parse_metadata(metadata)
@@ -37,14 +39,11 @@ class Database:
         return total
 
     def init_metadata(self):
-        magic_bytes = b"MYDB"
-        version = struct.pack('B', 1)
-        root_page = struct.pack('i', 0)
-        bitmap = b'\x00' * 128
-        padding = b'\x00' * 119
+        self.version = 1
+        self.root_page = 0
+        self.bitmap = bytearray(b'\x00' * 128)
 
-        data = magic_bytes + version + root_page + bitmap + padding
-        return data
+        self.update_metadata_on_disk()
 
     def parse_metadata(self, data):
         try:
