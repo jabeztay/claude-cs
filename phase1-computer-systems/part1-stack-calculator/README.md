@@ -14,7 +14,18 @@ Examples:
 
 ## Design Decisions
 
-*To be documented as implementation proceeds*
+### Stack Implementation
+- A custom class wrapping around Python list for learning. In production environments, using `collections.deque` is preferred for efficiency.
+- Can hold any data type
+- Raises `EmptyStackError` on invalid pop/peeks on empty stack
+
+### Core Operations
+- `push(item)`: add item to the top of the stack
+- `pop()`: remove and return the top item from the stack
+- `peek()`: return the top item from the stack without removing it
+- `is_empty()`: return True if the stack is empty, False otherwise
+- `size()`: return the number of items in the stack
+- `__repr__()`: return a string representation of the stack for debugging purposes 
 
 ## Features
 
