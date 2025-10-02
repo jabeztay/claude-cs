@@ -10,9 +10,11 @@
 **Completed**
 - Stack data structure with tests
 - Makefile for easy test running
+- Tokenizer for calculator
+  - Basic tokens: numbers, +, -, *, /
 
 **Next**
-- Implement tokenizer
+- Implement calculator
 
 #### Key Concepts Learned
 
