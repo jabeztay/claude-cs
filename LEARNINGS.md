@@ -8,13 +8,16 @@
 **Date Completed**:
 
 **Completed**
-- Stack data structure with tests
 - Makefile for easy test running
+- Stack data structure
 - Tokenizer for calculator
   - Basic tokens: numbers, +, -, *, /
+- Basic calculator evaluator
+  - Handles simple expressions like "3 4 +"
+  - Handles operators: +, -, *, /
 
 **Next**
-- Implement calculator
+- Wrap up and decide whether to add more features or move on
 
 #### Key Concepts Learned
 
