@@ -1,7 +1,8 @@
+import re
 from dataclasses import dataclass
 from enum import Enum
 
-VALID_OPERATORS = {"+", "-", "*", "/", "sin", "cos", "tan", "log", "exp", "sqrt"}
+VALID_OPERATORS = {"+", "-", "*", "/", "sin", "cos", "tan", "log", "exp", "sqrt", "STO"}
 RESERVED_CONSTANTS = {"pi", "e"}
 
 
@@ -9,6 +10,7 @@ class TokenType(Enum):
     NUMBER = "NUMBER"
     OPERATOR = "OPERATOR"
     CONSTANT = "CONSTANT"
+    VARIABLE = "VARIABLE"
 
 
 @dataclass
@@ -35,6 +37,15 @@ class EmptyInputError(TokenizerError):
     pass
 
 
+def check_variable_name(name: str) -> bool:
+    """Checks if a variable name is valid."""
+    return (
+        re.fullmatch(r"[a-zA-Z][a-zA-Z0-9]*", name) is not None
+        and name not in RESERVED_CONSTANTS
+        and name not in VALID_OPERATORS
+    )
+
+
 def tokenize(expression: str) -> list[Token]:
     """Tokenizes a postfix expression into a list of Tokens."""
     expression = expression.strip()
@@ -53,6 +64,8 @@ def tokenize(expression: str) -> list[Token]:
                 result.append(Token(TokenType.OPERATOR, token))
             elif token in RESERVED_CONSTANTS:
                 result.append(Token(TokenType.CONSTANT, token))
+            elif check_variable_name(token):
+                result.append(Token(TokenType.VARIABLE, token))
             else:
                 raise InvalidTokenError(f"Invalid token: {token}")
 

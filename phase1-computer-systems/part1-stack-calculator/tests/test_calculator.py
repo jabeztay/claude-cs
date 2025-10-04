@@ -6,6 +6,7 @@ from calculator import (
     CalculatorError,
     InsufficientOperandsError,
     TooManyOperandsError,
+    UndefinedVariableError,
 )
 
 
@@ -73,6 +74,7 @@ def test_trigonometric_functions(calc):
     assert math.isclose(calc.evaluate("pi cos"), -1.0, rel_tol=1e-9)
     assert calc.evaluate("pi sin") == math.sin(math.pi)
 
+
 def test_log_exp_sqrt_functions(calc):
     """Test log, exp, and sqrt functions."""
     assert math.isclose(calc.evaluate("1 log"), 0.0)
@@ -87,3 +89,46 @@ def test_sqrt_log_negative_number_errors(calc):
 
     with pytest.raises(ValueError):
         calc.evaluate("-1 log")
+
+
+def test_sto_no_operands_error(calc):
+    """Test that STO with no operands raises InsufficientOperandsError."""
+    with pytest.raises(InsufficientOperandsError):
+        calc.evaluate("STO")
+
+
+def test_sto_last_token_error(calc):
+    """Test that STO as the last token raises CalculatorError."""
+    with pytest.raises(CalculatorError):
+        calc.evaluate("5 3 STO")
+
+
+def test_sto_not_variable_error(calc):
+    """Test that STO with a non-variable raises CalculatorError."""
+    with pytest.raises(CalculatorError):
+        calc.evaluate("5 STO 3")
+
+
+def test_sto_overwrite_reserved_error(calc):
+    """Test that STO with a reserved name raises CalculatorError."""
+    with pytest.raises(CalculatorError):
+        calc.evaluate("5 STO pi")
+    with pytest.raises(CalculatorError):
+        calc.evaluate("5 STO e")
+    with pytest.raises(CalculatorError):
+        calc.evaluate("5 STO +")
+    with pytest.raises(CalculatorError):
+        calc.evaluate("5 STO sin")
+
+
+def test_variables_and_sto(calc):
+    """Test variable storage and retrieval using STO."""
+    assert calc.evaluate("5 STO x") == 5
+    assert calc._vars["x"] == 5.0
+    assert calc.evaluate("3 x +") == 8.0
+
+
+def test_undefined_variable_error(calc):
+    """Test that using an undefined variable raises UndefinedVariableError."""
+    with pytest.raises(UndefinedVariableError):
+        calc.evaluate("y 3 +")
