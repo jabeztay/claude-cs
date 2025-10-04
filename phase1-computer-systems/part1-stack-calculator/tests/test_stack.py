@@ -1,5 +1,5 @@
 import pytest
-from stack import Stack, EmptyStackError
+from stack import EmptyStackError, Stack
 
 
 def test_push():

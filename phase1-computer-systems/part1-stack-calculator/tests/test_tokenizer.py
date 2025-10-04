@@ -1,5 +1,5 @@
-from tokenizer import tokenize, TokenType, Token, InvalidTokenError, EmptyInputError
 import pytest
+from tokenizer import EmptyInputError, InvalidTokenError, Token, TokenType, tokenize
 
 
 def test_empty_input():
@@ -25,6 +25,12 @@ def test_operators():
     assert tokenize("-") == [Token(TokenType.OPERATOR, "-")]
     assert tokenize("*") == [Token(TokenType.OPERATOR, "*")]
     assert tokenize("/") == [Token(TokenType.OPERATOR, "/")]
+
+
+def test_constants():
+    """Test that constants are tokenized correctly"""
+    assert tokenize("pi") == [Token(TokenType.CONSTANT, "pi")]
+    assert tokenize("e") == [Token(TokenType.CONSTANT, "e")]
 
 
 def test_mixed_expression():

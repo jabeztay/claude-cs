@@ -1,12 +1,18 @@
-from stack import Stack
-from tokenizer import tokenize, TokenType
+import math
 
+from stack import Stack
+from tokenizer import TokenType, tokenize
 
 OPERATORS = {
     "+": lambda a, b: a + b,
     "-": lambda a, b: a - b,
     "*": lambda a, b: a * b,
     "/": lambda a, b: a / b,
+}
+
+CONSTANTS = {
+    "pi": math.pi,
+    "e": math.e,
 }
 
 
@@ -39,6 +45,8 @@ class Calculator:
         for token in tokens:
             if token.type == TokenType.NUMBER:
                 stack.push(token.value)
+            elif token.type == TokenType.CONSTANT:
+                stack.push(CONSTANTS[token.value])
             elif token.type == TokenType.OPERATOR:
                 if stack.size() < 2:
                     raise InsufficientOperandsError(

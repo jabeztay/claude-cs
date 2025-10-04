@@ -31,9 +31,10 @@ Examples:
 
 ### Core
 - [x] Basic stack implementation (push, pop, peek)
-- [ ] Postfix expression evaluator
-- [ ] Support for +, -, *, / operations
-- [ ] Error handling for invalid expressions
+- [x] Postfix expression evaluator
+- [x] Support for `+`, `-`, `*`, `/` operations
+- [x] Error handling for invalid expressions
+- [x] Constants like `pi` and `e`
 
 ### Extensions
 - [ ] Variable storage and retrieval

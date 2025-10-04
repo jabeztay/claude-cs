@@ -2,11 +2,13 @@ from dataclasses import dataclass
 from enum import Enum
 
 VALID_OPERATORS = {"+", "-", "*", "/"}
+RESERVED_CONSTANTS = {"pi", "e"}
 
 
 class TokenType(Enum):
     NUMBER = "NUMBER"
     OPERATOR = "OPERATOR"
+    CONSTANT = "CONSTANT"
 
 
 @dataclass
@@ -49,6 +51,8 @@ def tokenize(expression: str) -> list[Token]:
         except ValueError:
             if token in VALID_OPERATORS:
                 result.append(Token(TokenType.OPERATOR, token))
+            elif token in RESERVED_CONSTANTS:
+                result.append(Token(TokenType.CONSTANT, token))
             else:
                 raise InvalidTokenError(f"Invalid token: {token}")
 

@@ -1,10 +1,12 @@
+import math
+
+import pytest
 from calculator import (
     Calculator,
     CalculatorError,
     InsufficientOperandsError,
     TooManyOperandsError,
 )
-import pytest
 
 
 @pytest.fixture
@@ -54,3 +56,9 @@ def test_insufficient_operands_error(calc):
     """Test that insufficient operands raises InsufficientOperandsError."""
     with pytest.raises(InsufficientOperandsError):
         calc.evaluate("3 +")
+
+
+def test_constant_evaluation(calc):
+    """Test that constants evaluate correctly."""
+    assert calc.evaluate("pi") == math.pi
+    assert calc.evaluate("e") == math.e
