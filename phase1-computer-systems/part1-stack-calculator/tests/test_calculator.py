@@ -62,3 +62,28 @@ def test_constant_evaluation(calc):
     """Test that constants evaluate correctly."""
     assert calc.evaluate("pi") == math.pi
     assert calc.evaluate("e") == math.e
+
+
+def test_trigonometric_functions(calc):
+    """Test trigonometric functions."""
+    assert math.isclose(calc.evaluate("0 sin"), 0.0)
+    assert math.isclose(calc.evaluate("0 cos"), 1.0)
+    assert math.isclose(calc.evaluate("0 tan"), 0.0)
+    assert math.isclose(calc.evaluate("pi 2 / sin"), 1.0, rel_tol=1e-9)
+    assert math.isclose(calc.evaluate("pi cos"), -1.0, rel_tol=1e-9)
+    assert calc.evaluate("pi sin") == math.sin(math.pi)
+
+def test_log_exp_sqrt_functions(calc):
+    """Test log, exp, and sqrt functions."""
+    assert math.isclose(calc.evaluate("1 log"), 0.0)
+    assert math.isclose(calc.evaluate("1 exp"), math.e)
+    assert math.isclose(calc.evaluate("4 sqrt"), 2.0)
+
+
+def test_sqrt_log_negative_number_errors(calc):
+    """Test that sqrt and log of negative numbers raise ValueError."""
+    with pytest.raises(ValueError):
+        calc.evaluate("-4 sqrt")
+
+    with pytest.raises(ValueError):
+        calc.evaluate("-1 log")

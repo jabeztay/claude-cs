@@ -34,11 +34,11 @@ Examples:
 - [x] Postfix expression evaluator
 - [x] Support for `+`, `-`, `*`, `/` operations
 - [x] Error handling for invalid expressions
-- [x] Constants like `pi` and `e`
 
 ### Extensions
 - [ ] Variable storage and retrieval
-- [ ] Mathematical functions (sin, cos, sqrt, pow)
+- [x] Constants like `pi` and `e`
+- [x] Mathematical functions (`sin`, `cos`, `sqrt`)
 - [ ] Expression validation
 
 ## Usage

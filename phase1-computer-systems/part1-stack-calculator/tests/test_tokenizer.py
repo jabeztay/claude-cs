@@ -25,6 +25,12 @@ def test_operators():
     assert tokenize("-") == [Token(TokenType.OPERATOR, "-")]
     assert tokenize("*") == [Token(TokenType.OPERATOR, "*")]
     assert tokenize("/") == [Token(TokenType.OPERATOR, "/")]
+    assert tokenize("sin") == [Token(TokenType.OPERATOR, "sin")]
+    assert tokenize("cos") == [Token(TokenType.OPERATOR, "cos")]
+    assert tokenize("tan") == [Token(TokenType.OPERATOR, "tan")]
+    assert tokenize("log") == [Token(TokenType.OPERATOR, "log")]
+    assert tokenize("exp") == [Token(TokenType.OPERATOR, "exp")]
+    assert tokenize("sqrt") == [Token(TokenType.OPERATOR, "sqrt")]
 
 
 def test_constants():

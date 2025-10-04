@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
 
-VALID_OPERATORS = {"+", "-", "*", "/"}
+VALID_OPERATORS = {"+", "-", "*", "/", "sin", "cos", "tan", "log", "exp", "sqrt"}
 RESERVED_CONSTANTS = {"pi", "e"}
 
 
