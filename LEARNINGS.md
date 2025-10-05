@@ -15,9 +15,10 @@
 - Basic calculator evaluator
   - Handles simple expressions like "3 4 +"
   - Handles operators: +, -, *, /
+- Calculator REPL
 
 **Next**
-- Wrap up and decide whether to add more features or move on
+- Wrap up learnings, cleanup, and prepare for next part
 
 #### Key Concepts Learned
 

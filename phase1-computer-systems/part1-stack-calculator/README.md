@@ -36,9 +36,10 @@ Examples:
 - [x] Error handling for invalid expressions
 
 ### Extensions
-- [ ] Variable storage and retrieval
+- [x] Variable storage and retrieval
 - [x] Constants like `pi` and `e`
 - [x] Mathematical functions (`sin`, `cos`, `sqrt`)
+- [x] REPL for interactive use
 - [ ] Expression validation
 
 ## Usage

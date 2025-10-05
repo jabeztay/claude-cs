@@ -1,4 +1,5 @@
 import math
+from dataclasses import dataclass
 
 from stack import Stack
 from tokenizer import TokenType, tokenize
@@ -20,6 +21,12 @@ CONSTANTS = {
     "pi": math.pi,
     "e": math.e,
 }
+
+
+@dataclass
+class REPLResult:
+    output: str | None
+    quit: bool = False
 
 
 class CalculatorError(Exception):
@@ -51,6 +58,7 @@ class Calculator:
     def __init__(self) -> None:
         """Initializes the calculator."""
         self._vars = {}
+        self._ans = 0.0
 
     def evaluate(self, expression: str) -> float:
         """Evaluates a postfix expressions and returns the result."""
@@ -84,6 +92,8 @@ class Calculator:
                         raise CalculatorError(
                             f"Expected variable after 'STO', got '{next_token.value}'."
                         )
+                    if next_token.value == "ans":
+                        raise CalculatorError("Cannot overwrite reserved name 'ans'.")
                     a = stack.peek()
                     self._vars[next_token.value] = a
 
@@ -106,7 +116,9 @@ class Calculator:
                     stack.push(result)
 
             elif token.type == TokenType.VARIABLE:
-                if token.value in self._vars:
+                if token.value == "ans":
+                    stack.push(self._ans)
+                elif token.value in self._vars:
                     stack.push(self._vars[token.value])
                 else:
                     raise UndefinedVariableError(
@@ -119,3 +131,65 @@ class Calculator:
             )
 
         return stack.peek()
+
+    def repl(self) -> None:
+        """Starts a REPL for the calculator."""
+        print("Postfix Calculator REPL. Type 'help' for commands.")
+
+        while True:
+            try:
+                user_input = input("> ").strip()
+
+                if not user_input:
+                    continue
+
+                result = self.handle_input(user_input)
+
+                if result.quit:
+                    print("Exiting calculator. Goodbye!")
+                    break
+
+                if result.output:
+                    print(result.output)
+
+            except CalculatorError as e:
+                print(f"Error: {e}")
+            except KeyboardInterrupt:
+                print("\nExiting calculator. Goodbye!")
+                break
+            except Exception as e:
+                print(f"Unexpected error: {e}")
+
+    def handle_input(self, input_str: str) -> REPLResult:
+        """Processes user input and returns result.
+        Assumes that input_str is non-empty and stripped.
+        """
+        if input_str == "exit" or input_str == "quit":
+            return REPLResult(output=None, quit=True)
+        elif input_str == "clear":
+            self._vars.clear()
+            return REPLResult(output="All variables cleared.", quit=False)
+        elif input_str == "help":
+            help_text = (
+                "Supported commands:\n"
+                "- exit, quit: Exit the calculator.\n"
+                "- clear: Clear all stored variables.\n"
+                "- help: Show this help message.\n"
+                "- vars: List all stored variables.\n"
+                "You can also enter postfix expressions to evaluate them."
+            )
+            return REPLResult(output=help_text, quit=False)
+        elif input_str == "vars":
+            if not self._vars:
+                return REPLResult(output="No variables defined.", quit=False)
+            vars_list = "\n".join(f"{k}: {v}" for k, v in self._vars.items())
+            return REPLResult(output=vars_list, quit=False)
+        else:
+            result = self.evaluate(input_str)
+            self._ans = result
+            return REPLResult(output=str(result), quit=False)
+
+
+if __name__ == "__main__":
+    calc = Calculator()
+    calc.repl()

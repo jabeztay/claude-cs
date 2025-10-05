@@ -5,6 +5,7 @@ from calculator import (
     Calculator,
     CalculatorError,
     InsufficientOperandsError,
+    REPLResult,
     TooManyOperandsError,
     UndefinedVariableError,
 )
@@ -119,6 +120,8 @@ def test_sto_overwrite_reserved_error(calc):
         calc.evaluate("5 STO +")
     with pytest.raises(CalculatorError):
         calc.evaluate("5 STO sin")
+    with pytest.raises(CalculatorError):
+        calc.evaluate("5 STO ans")
 
 
 def test_variables_and_sto(calc):
@@ -132,3 +135,121 @@ def test_undefined_variable_error(calc):
     """Test that using an undefined variable raises UndefinedVariableError."""
     with pytest.raises(UndefinedVariableError):
         calc.evaluate("y 3 +")
+
+
+def test_handle_input_commands(calc):
+    """Test handle input commands like exit, quit, clear, help and vars."""
+    result = calc.handle_input("exit")
+    assert result.output is None
+    assert result.quit
+
+    result = calc.handle_input("quit")
+    assert result.output is None
+    assert result.quit
+
+    result = calc.handle_input("clear")
+    assert result.output == "All variables cleared."
+    assert not result.quit
+
+    result = calc.handle_input("vars")
+    assert result.output == "No variables defined."
+    assert not result.quit
+
+
+def test_handle_input_basic_expressions(calc):
+    """Test handle input function and REPLResult returns."""
+    result = calc.handle_input("3 4 +")
+    assert isinstance(result, REPLResult)
+    assert result.output == "7.0"
+    assert not result.quit
+
+
+def test_ans_variable(calc):
+    """Test that the ans variable stores the last result."""
+    result = calc.handle_input("ans")
+    assert result.output == "0.0"
+    result = calc.handle_input("3 4 +")
+    assert result.output == "7.0"
+    assert calc._ans == 7.0
+    result = calc.handle_input("ans 3 +")
+    assert result.output == "10.0"
+    assert calc._ans == 10.0
+
+
+def test_clear_preserves_ans(calc):
+    """Test that clear command preserves the ans variable."""
+    result = calc.handle_input("3 4 +")
+    assert result.output == "7.0"
+    assert calc._ans == 7.0
+    result = calc.handle_input("5 STO x")
+    assert result.output == "5.0"
+    assert calc._vars["x"] == 5.0
+    assert calc._ans == 5.0
+    result = calc.handle_input("clear")
+    assert result.output == "All variables cleared."
+    assert not result.quit
+    assert calc._ans == 5.0
+    assert calc._vars == {}
+    with pytest.raises(UndefinedVariableError):
+        calc.handle_input("x 2 +")
+
+
+def test_handle_input_variables(calc):
+    """Test handle input with variable assignments and usage."""
+    result = calc.handle_input("8 STO a")
+    assert result.output == "8.0"
+    assert not result.quit
+
+    result = calc.handle_input("vars")
+    assert result.output == "a: 8.0"
+    assert not result.quit
+
+    result = calc.handle_input("2 STO b")
+    assert result.output == "2.0"
+    assert not result.quit
+
+    result = calc.handle_input("vars")
+    assert result.output in ("a: 8.0\nb: 2.0", "b: 2.0\na: 8.0")
+    assert not result.quit
+
+    result = calc.handle_input("a b *")
+    assert result.output == "16.0"
+    assert not result.quit
+
+    result = calc.handle_input("a b +")
+    assert result.output == "10.0"
+    assert not result.quit
+
+    result = calc.handle_input("a b -")
+    assert result.output == "6.0"
+    assert not result.quit
+
+    result = calc.handle_input("a b /")
+    assert result.output == "4.0"
+    assert not result.quit
+
+    result = calc.handle_input("ans")
+    assert result.output == "4.0"
+    assert not result.quit
+
+    result = calc.handle_input("ans 3 +")
+    assert result.output == "7.0"
+    assert not result.quit
+
+
+def test_handle_input_errors(calc):
+    """Test handle input with various error scenarios."""
+    with pytest.raises(ZeroDivisionError):
+        calc.handle_input("10 0 /")
+
+    with pytest.raises(InsufficientOperandsError):
+        calc.handle_input("3 +")
+
+    with pytest.raises(TooManyOperandsError):
+        calc.handle_input("3 3")
+
+    with pytest.raises(UndefinedVariableError):
+        calc.handle_input("y 3 +")
+
+    with pytest.raises(CalculatorError):
+        calc.handle_input("5 STO pi")
