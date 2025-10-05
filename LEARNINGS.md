@@ -7,16 +7,6 @@
 **Date Started**: 2025-10-01
 **Date Completed**: 2025-10-05
 
-**Completed**
-- Makefile for easy test running
-- Stack data structure
-- Tokenizer for calculator
-  - Basic tokens: numbers, +, -, *, /
-- Basic calculator evaluator
-  - Handles simple expressions like "3 4 +"
-  - Handles operators: +, -, *, /
-- Calculator REPL
-
 #### Key Concepts Learned
 
 - Test Driven Development with pytest
@@ -45,6 +35,39 @@
 #### What I'd Do Differently
 
 - If possible, I'd like to think more of the end design and goal before implementation. Having to build things like variable storage and a last answer recall later was a bit tricky.
+
+### Part 2: Virtual Machines
+
+**Date Started**: 2025-10-05
+**Date Completed**:
+
+#### Key Concepts Learned
+
+- Fetch-decode-execute cycle
+- Stack-based virtual machines
+- Bytecode and instruction sets
+
+#### Challenges Faced
+
+- Initially understanding what bytecode is and how it relates to assembly and machine code.
+
+#### Breakthrough Moments
+
+- Realising bytecode execution is just reading instruction at current PC, do the thing, and then move PC forward
+- Understanding that a VM is a simple loop of fetch-decode-execute
+
+#### Connections to Other Concepts
+
+- Reuse of the stack calculator's stack for the VM's stack
+- Arithmetic operations are similar to those in the stack calculator, but now as opcodes
+
+#### Questions for Future Exploration
+
+#### What I'd Do Differently
+
+
+
+
 
 ---
 

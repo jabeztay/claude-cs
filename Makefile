@@ -1,4 +1,5 @@
 PHASE1_PART1 = phase1-computer-systems/part1-stack-calculator
+PHASE1_PART2 = phase1-computer-systems/part2-virtual-machine
 
 .PHONY: help test clean
 
@@ -19,10 +20,12 @@ clean:
 test-all:
 	@echo "Running all tests..."
 	$(MAKE) test-1-1
+	$(MAKE) test-1-2
 
 coverage-all:
 	@echo "Running all coverage..."
 	$(MAKE) coverage-1-1
+	$(MAKE) coverage-1-2
 
 test-1-1:
 	@echo "Running tests for Phase 1 Part 1..."
@@ -31,3 +34,11 @@ test-1-1:
 coverage-1-1:
 	@echo "Running coverage tests for Phase 1 Part 1..."
 	cd ./$(PHASE1_PART1) && PYTHONPATH=src pytest tests/ -v --cov=src --cov-report=term-missing tests/
+
+test-1-2:
+	@echo "Running tests for Phase 1 Part 2..."
+	cd ./$(PHASE1_PART2) && PYTHONPATH=src pytest tests/ -v
+
+coverage-1-2:
+	@echo "Running coverage tests for Phase 1 Part 2..."
+	cd ./$(PHASE1_PART2) && PYTHONPATH=src pytest tests/ -v --cov=src --cov-report=term-missing tests/
