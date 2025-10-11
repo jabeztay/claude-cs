@@ -39,7 +39,7 @@
 ### Part 2: Virtual Machines
 
 **Date Started**: 2025-10-05
-**Date Completed**:
+**Date Completed**: 2025-10-11
 
 #### Key Concepts Learned
 
@@ -53,19 +53,25 @@
 
 #### Breakthrough Moments
 
-- Realising bytecode execution is just reading instruction at current PC, do the thing, and then move PC forward
+- Realising bytecode execution is just reading instruction at current PC, do the thing, and then move PC forward (or jump).
 - Understanding that a VM is a simple loop of fetch-decode-execute
 
 #### Connections to Other Concepts
 
 - Reuse of the stack calculator's stack for the VM's stack
 - Arithmetic operations are similar to those in the stack calculator, but now as opcodes
+- Prepares for next part on compilers, as we now have a target to compile to
 
 #### Questions for Future Exploration
 
+- How do real-world VMs like JVM and Python's VM work?
+- What about register-based VMs?
+- How can we optimize the VM? Or rather it's operations? Clearly takes forever to do a simple Fibonnaci or Factorial calculation right now.
+
 #### What I'd Do Differently
 
-
+- Refactor operations as they are mostly repeated code patterns.
+- Build the disassembler before trying to build the demo programs, as it would've helped a lot in understanding and debugging the bytecode programs.
 
 
 

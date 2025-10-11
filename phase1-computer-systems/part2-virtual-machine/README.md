@@ -84,12 +84,13 @@ All comparison operations pop two values, compare them, and push 1 (true) or 0 (
 Instructions are represented as lists of integers:
 ```python
 # Example: Push 5, Push 3, Add, Print, Halt
+# For readability, using an enum for opcodes
 bytecode = [
-    0x01, 5,    # PUSH 5
-    0x01, 3,    # PUSH 3
-    0x02,       # ADD
-    0x10,       # PRINT
-    0xFF        # HALT
+    Opcode.PUSH.value, 5,
+    Opcode.PUSH.value, 3,
+    Opcode.ADD.value,
+    Opcode.PRINT.value,
+    Opcode.HALT.value
 ]
 ```
 
@@ -108,7 +109,7 @@ bytecode = [
 ### Extensions
 - [ ] Function calls (CALL/RET with call stack)
 - [ ] Debugging mode (step-through execution)
-- [ ] Bytecode disassembler (convert bytes to readable format)
+- [x] Bytecode disassembler (convert bytes to readable format)
 - [ ] Execution tracing and profiling
 - [ ] Error handling and stack overflow protection
 
@@ -119,31 +120,42 @@ bytecode = [
 vm = VirtualMachine(memory_size=256)
 
 bytecode = [
-    PUSH, 5,
-    PUSH, 3,
-    ADD,
-    PRINT,
-    HALT
+    Opcode.PUSH.value, 5,
+    Opcode.PUSH.value, 3,
+    Opcode.ADD.value,
+    Opcode.PRINT.value,
+    Opcode.HALT.value
 ]
 
-vm.load(bytecode)
-vm.run()  # Output: 8
+vm.run(bytecode)  # Output: 8
 
 # Example: Loop from 0 to 5
 bytecode = [
-    PUSH, 0,        # counter starts at 0
-    DUP,            # duplicate for comparison
-    PUSH, 5,        # push limit
-    GE,             # counter >= 5?
-    JNZ, 14,        # if true, jump to HALT
-    PUSH, 1,        # push 1
-    ADD,            # increment counter
-    JMP, 1,         # jump back to DUP
-    HALT            # end program
+    Opcode.PUSH.value, 0,        # counter starts at 0
+    Opcode.DUP.value,            # duplicate for comparison
+    Opcode.PUSH.value, 5,        # push limit
+    Opcode.GE.value,             # counter >= 5?
+    Opcode.JNZ.value, 14,        # if true, jump to HALT
+    Opcode.PUSH.value, 1,        # push 1
+    Opcode.ADD.value,            # increment counter
+    Opcode.JMP.value, 1,         # jump back to DUP
+    Opcode.HALT.value            # end program
 ]
 
-vm.load(bytecode)
-vm.run()
+vm.run(bytecode)
+```
+
+## Examples
+
+See `examples/demo.py` for complete working programs:
+- Factorial calculation (5! = 120)
+- Fibonacci sequence (first N numbers)
+
+Use the disassembler to view bytecode in readable format:
+```python
+from disassembler import disassemble
+bytecode = factorial(5)
+print(disassemble(bytecode))
 ```
 
 ## Project Structure
