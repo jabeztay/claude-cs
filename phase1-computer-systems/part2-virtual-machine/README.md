@@ -99,10 +99,10 @@ bytecode = [
 - [x] Instruction set implementation
 - [x] Stack-based execution engine
 - [x] Program counter and execution loop
-- [ ] Memory array for variable storage
+- [x] Memory array for variable storage
 - [x] Arithmetic operations (ADD, SUB, MUL, DIV)
-- [ ] Comparison operations (EQ, NEQ, LT, GT, LE, GE)
-- [ ] Control flow (jumps, conditionals)
+- [x] Comparison operations (EQ, NEQ, LT, GT, LE, GE)
+- [x] Control flow (jumps, conditionals)
 - [x] Basic I/O (PRINT)
 
 ### Extensions
