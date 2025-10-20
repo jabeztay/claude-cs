@@ -94,6 +94,6 @@ After completing each part:
 
 ## Current Focus
 
-**Active**: Phase 1, Part 1 - Stack Calculator  
-**Next**: To be determined after Part 1 completion  
+**Active**: Phase 1, Part 3 - Simple Compiler
+**Next**: To be determined after Part 3 completion  
 **Adjustments**: Will be documented here as journey progresses

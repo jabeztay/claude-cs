@@ -4,7 +4,7 @@ A self-paced CS curriculum built through practical implementation. Learn core co
 
 ## Current Status
 
-**Phase 1: Computer Systems** - Part 1: Stack Calculator
+**Phase 1: Computer Systems** - Part 3: Simple Compiler
 
 ## Repository Structure
 
