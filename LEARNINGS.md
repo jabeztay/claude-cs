@@ -73,7 +73,78 @@
 - Refactor operations as they are mostly repeated code patterns.
 - Build the disassembler before trying to build the demo programs, as it would've helped a lot in understanding and debugging the bytecode programs.
 
+### Part 3: Simple Compiler (Design Phase)
 
+**Date Started**: 2025-02-01
+**Status**: Paused for Crafting Interpreters detour
+
+#### Key Concepts Learned
+
+- **Compilation pipeline**: source → tokens → AST → bytecode. Each stage transforms the representation.
+- **Lexer vs Parser distinction**: Lexer produces flat token sequence (still "dumb" splitting). Parser is where structure emerges into AST.
+- **Post-order traversal for codegen**: Process children before the node itself - same pattern as postfix evaluation. For `x = a + b`: generate code for `a + b` first (leaves result on stack), then emit STORE.
+- **AST captures semantics, not syntax**: Left side of assignment is a *target* (STORE), right side usage of same variable is a *value* (LOAD). Same identifier, different meaning based on context.
+
+#### Design Decisions Made
+
+- **Brace-based syntax**: Simpler than indentation - no need for INDENT/DEDENT tokens
+- **Simple operators only**: No `+=`, just `x = x + 1` - reduces lexer complexity
+- **Integers only**: No floats for simplicity
+- **No functions**: Would require CALL/RET and call stack in VM - significant extension
+
+#### Bytecode Patterns Understood
+
+**Assignment** (`x = expr`):
+1. Generate code for expr (leaves value on stack)
+2. Emit STORE x
+
+**Binary operation** (`a + b`):
+1. Generate code for left operand
+2. Generate code for right operand  
+3. Emit operator
+
+**While loop**:
+```
+LOOP_START: <condition>
+            JZ LOOP_END      ; exit if false
+            <body>
+            JMP LOOP_START
+LOOP_END:   ...
+```
+
+#### Challenges Identified
+
+- **Operator precedence**: `1 + 2 * 3` needs to parse as `1 + (2 * 3)`. Requires either layered recursive descent or Pratt parsing. More complex than initially expected.
+- **Lookahead in lexer**: Need to peek ahead to distinguish `=` vs `==`, `<` vs `<=`
+- **Jump address resolution**: When emitting JZ for a loop, don't know the target address yet. Need backpatching or two-pass approach.
+
+#### Why Pausing for Crafting Interpreters
+
+The design phase revealed that precedence parsing and error handling deserve proper treatment. Crafting Interpreters provides:
+- Battle-tested implementation patterns
+- Clear explanation of precedence parsing
+- Complete working reference
+
+Plan: Build Lox (or significant portions), then return with deeper understanding to complete this compiler.
+
+#### Questions to Explore
+
+- How does Pratt parsing work vs recursive descent with precedence levels?
+- What design decisions does clox's VM make differently from mine?
+- How do real compilers handle forward references (jumps to unknown addresses)?
+- How should error recovery work - panic mode, synchronization points?
+
+#### Connections to Other Concepts
+
+- Post-order traversal for codegen mirrors postfix evaluation from Part 1
+- Bytecode generation targets the VM from Part 2 - they're designed to work together
+- Tokenization is similar to Part 1 but with lookahead for multi-character operators
+- This rounds out the "how do computers execute programs" question from Phase 1
+
+#### What I'd Do Differently
+
+- Would have started with Crafting Interpreters as a reference from the beginning
+- The mental model building was valuable, but implementation needs more structured guidance for something this complex
 
 ---
 

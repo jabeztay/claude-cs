@@ -8,28 +8,45 @@ A self-paced journey through CS fundamentals via practical implementation. Each 
 
 **Core Question**: How do computers execute programs?
 
-### Part 1: Stack Calculator
+### Part 1: Stack Calculator ✓
 - **Goal**: Understand stack data structures and expression evaluation
 - **Build**: Postfix notation calculator
 - **Learn**: Stack operations, parsing, evaluation strategies
 - **Foundation for**: VM's execution stack
 
-### Part 2: Virtual Machine
+### Part 2: Virtual Machine ✓
 - **Goal**: Understand how programs execute as bytecode
 - **Build**: Stack-based VM with instruction set
 - **Learn**: Opcodes, program counter, execution loop
 - **Foundation for**: Understanding compilation targets
 
-### Part 3: Simple Compiler
+### Part 3: Simple Compiler (In Progress)
 - **Goal**: Bridge high-level code to VM bytecode
 - **Build**: Compiler for a minimal language
 - **Learn**: Lexing, parsing, AST, code generation
 - **Foundation for**: Understanding how languages work
 
+#### Crafting Interpreters Detour (Current)
+
+Before completing the compiler, taking a structured detour through [Crafting Interpreters](https://craftinginterpreters.com/) to build stronger foundations in:
+
+- Precedence parsing (Pratt parsing vs recursive descent)
+- Error handling and recovery
+- Complete language implementation patterns
+
+**Path:**
+1. Work through Part II: Tree-Walk Interpreter (Chapters 4-13)
+2. Optionally explore Part III: Bytecode Virtual Machine
+3. Return to complete Part 3 compiler with deeper understanding
+4. Consider redesigning VM based on learnings
+
+**Why this approach:** The design phase revealed that parser construction (especially precedence handling) benefits from a complete reference implementation. Building Lox provides that foundation while still being hands-on learning.
+
 ### Potential Extensions
 - Debugger for the VM
 - Optimizer for the compiler
-- Additional language features
+- Additional language features (functions, closures)
+- Redesign VM instruction set based on Crafting Interpreters learnings
 
 ## Phase 2: Data Structures in Practice
 
@@ -75,6 +92,7 @@ A self-paced journey through CS fundamentals via practical implementation. Each 
 2. **Connection Over Isolation**: Each concept builds on prior work
 3. **Depth Over Breadth**: Better to deeply understand fewer concepts
 4. **Reflection Required**: Document learnings before moving forward
+5. **Detours Are Valid**: Following references like Crafting Interpreters when they serve learning goals
 
 ## Success Metrics
 
@@ -94,6 +112,6 @@ After completing each part:
 
 ## Current Focus
 
-**Active**: Phase 1, Part 3 - Simple Compiler
-**Next**: To be determined after Part 3 completion  
-**Adjustments**: Will be documented here as journey progresses
+**Active**: Phase 1, Part 3 - Simple Compiler (Crafting Interpreters detour)
+**Next**: Complete Part 3 compiler, then Phase 2
+**Adjustments**: Crafting Interpreters added as structured foundation for compiler work
